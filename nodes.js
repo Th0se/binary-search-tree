@@ -55,7 +55,7 @@ const removeDuplicate = (array) => {
 const buildTree = (array) => {
     // A function to build a binary search tree.
     if (array.length === 1) {
-        return array;
+        return Node(array[0], null, null);
     } else if (array.length === 0) {
         return null;
     } else {
@@ -67,23 +67,42 @@ const buildTree = (array) => {
         const right = sortedArray.slice(middlePoint+1, sortedArray.length);
         const leftBranch = buildTree(left);
         const rightBranch = buildTree(right);
-        const result = {
-            data: sortedArray[middlePoint],
-            left: leftBranch,
-            right: rightBranch
-        };
+        const result = Node(sortedArray[middlePoint], leftBranch, rightBranch)
         return result;
     };
 };
 
+const Tree = (array) => {
+    /* A factory to make an object which has the root
+        of a binary search tree
+    */
+    const root = buildTree(array);
+    return {
+        root,
+    };
+};
 
-const rawA = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const rawB = [53, 836, 86, 865, 486, 135];
-const builtB = buildTree(rawB);
-console.log(builtB);
-console.log(builtB.left);
-console.log(builtB.left.left);
-console.log(builtB.left.right);
-console.log(builtB.right);
-console.log(builtB.right.left);
-console.log(builtB.right.right);
+const insert = (number, node) => {
+    // A function to insert a number into a tree
+    if (number === node.data) {
+        return;
+    } else if (number > node.data) {
+        if (node.right === null) {
+            node.right = Object(node.right);
+            node.right.data = number;
+            node.right.right = null;
+            node.right.left = null;
+        } else {
+            insert(number, node.right)
+        };
+    } else if (number < node.data) {
+        if (node.left === null) {
+            node.left = Object(node.left);
+            node.left.data = number;
+            node.left.left = null;
+            node.left.right = null;
+        } else {
+            insert(number, node.left)
+        };
+    };
+};
