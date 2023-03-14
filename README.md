@@ -1,2 +1,2 @@
 # binary-search-tree
-A way to build balanced binary search trees.
+This is my experimentation of building and manipulating binary search tree.
