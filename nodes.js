@@ -78,7 +78,7 @@ const Tree = (array) => {
         of a binary search tree
     */
     const root = buildTree(array);
-    
+
     const insert = function (value, node = this.root) {
         // This method adds a value into a binary search tree.
         // Do not supply the parameter `node` when calling this method.
@@ -154,9 +154,7 @@ const Tree = (array) => {
     };
 
     const levelOrder = function (node = this.root, result = [], queue = []) {
-        /* This method returns an array containing the value
-            of every node in a binary search tree.
-        */
+        // This method performs levelorder binary search tree traversal.
         // Supply no argument when calling this method.
         if (node === null) {
             return;
@@ -230,7 +228,7 @@ const Tree = (array) => {
 
     const height = function (node = this.root) {
         // This method returns the height of a binary search tree.
-        // Supply no argument whenc calling this method.
+        // Supply no argument when calling this method.
         if (node === null) {
             return 0;
         } else {
@@ -278,6 +276,7 @@ const Tree = (array) => {
 
     const isBalanced = function (root = this.root) {
         // This method checks whether a binary search tree is balanced.
+        // Supply no argument when calling this method.
         const leftHeight = height(root.left);
         const rightHeight = height(root.right);
         const difference = Math.abs(leftHeight - rightHeight);
@@ -290,6 +289,7 @@ const Tree = (array) => {
 
     const rebalance = function (tree = this) {
         // This method balances a binary search tree.
+        // Supply no argument when calling this method.
         const array = preorder(tree.root);
         const result = Tree(array);
         return result;
