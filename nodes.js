@@ -78,361 +78,235 @@ const Tree = (array) => {
         of a binary search tree
     */
     const root = buildTree(array);
-    return {
-        root,
-    };
-};
-
-const insert = (number, node) => {
-    // A function to insert a value into a binary search tree.
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            insert(8, tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            insert(8, tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    if (node.root) {
-        node = node.root;
-    };
-    if (number === node.data) {
-        return;
-    } else if (number > node.data) {
-        if (node.right === null) {
-            /* Change node.right from null to a node,
-                then assign the number into it.
-            */
-            node.right = Node(number, null, null);
-        } else {
-            insert(number, node.right)
-        };
-    } else if (number < node.data) {
-        if (node.left === null) {
-            /* Change node.left from a null to a node,
-                then assign the number into it.
-            */
-            node.left = Node(number, null, null);
-        } else {
-            insert(number, node.left)
-        };
-    };
-};
-
-const remove = (number, node, parent) => {
-    // A function to remove a number from a tree.
-    /*  Do not supply the parameter `parent` when calling this function
-        outside a recursions.
-    */
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            remove(8, tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            remove(8, tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    if (node.root) {
-        node = node.root;
-    };
-    if (number === node.data) {
-        if (node.right === null) {
+    
+    const insert = function (value, node = this.root) {
+        // This method adds a value into a binary search tree.
+        // Do not supply the parameter `node` when calling this method.
+        if (value === node.data) {
+            return;
+        } else if (value > node.data) {
+            if (node.right === null) {
+                /* Change node.right from null to a node,
+                    then assign the value into it.
+                */
+                node.right = Node(value, null, null);
+            } else {
+                insert(value, node.right)
+            };
+        } else if (value < node.data) {
             if (node.left === null) {
-                if (parent.left === node) {
-                    parent.left = null;
+                /* Change node.left from a null to a node,
+                    then assign the value into it.
+                */
+                node.left = Node(value, null, null);
+            } else {
+                insert(value, node.left)
+            };
+        };
+    };
+
+    const remove = function (value, node = this.root, parent) {
+        // this method removes a node of certain value from a binary search tree.
+        // Do not supply the parameter `node` and `parent` when calling this method.
+        if (value === node.data) {
+            if (node.right === null) {
+                if (node.left === null) {
+                    if (parent.left === node) {
+                        parent.left = null;
+                    } else {
+                        parent.right = null;
+                    };
                 } else {
-                    parent.right = null;
+                    node.data = node.left.data;
+                    node.left = node.left.left;
                 };
             } else {
-                node.data = node.left.data;
-                node.left = node.left.left;
+                node.data = node.right.data;
+                if (node.right.right !== null) {
+                    node.right = node.right.right
+                } else {
+                    node.right = node.right.left;
+                };
             };
-        } else {
-            node.data = node.right.data;
-            if (node.right.right !== null) {
-                node.right = node.right.right
-            } else {
-                node.right = node.right.left;
-            };
-        };
-    } else if (number <= node.data) {
-        remove(number, node.left, node);
-    } else if (number >= node.data) {
-        remove(number, node.right, node);
-    };
-};
-
-const find = (value, node) => {
-    /* A function to return the node containing the given value in a
-        binary search tree, if it exists.
-    */
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            find(8, tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            find(8, tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    if (node != null) {
-        if (node.root) {
-            node = node.root;
-        };
-        if (value === node.data) {
-            return node;
-        } else if (value < node.data) {
-            return find(value, node.left);
-        } else if (value > node.data) {
-            return find(value, node.right);
-        };
-    } else {
-        return `The value doesn't exist in this tree.`;
-    };
-};
-
-const levelOrder = (node, result = [], queue = []) => {
-    /* A function to return an array containing the value
-        of every node in a binary search tree. 
-    */
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            levelOrder(tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            levelOrder(tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    /*  Do not supply the parameter `result` and `queue` when calling
-        the function outside a recursion.
-    */
-    if (node === null) {
-        return;
-    } else {
-        if (node.root) {
-            node = node.root;
-        };
-        result.push(node.data);
-        queue.push(node.left);
-        queue.push(node.right);
-        while (queue.length) {
-            const currentLevel = queue[0];
-            queue.shift();
-            levelOrder(currentLevel, result, queue);
-        };
-
-        return result;
-    };
-};
-
-const inorder = (node, result = []) => {
-    // A function to do inorder binary search tree traversal.
-    /* Do not supply the parameter `result` when calling the function
-        outside a recursion.
-    */
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            inorder(tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            inorder(tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    if (node === null) {
-        return;
-    } else {
-        if (node.root) {
-            node = node.root;
-        };
-
-        if (node.left) {
-            inorder(node.left, result);
-        };
-        result.push(node.data);
-        if (node.right) {
-            inorder(node.right, result);
-        };
-
-        return result;
-    };
-};
-
-const preorder = (node, result = []) => {
-    // A function to do preorder binnary search tree traversal.
-    /* Do not supply the parameter `result` when calling the function
-        outside a recursion.
-    */
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            preorder(tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            preorder(tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    if (node === null) {
-        return;
-    } else {
-        if (node.root) {
-            node = node.root;
-        };
-        result.push(node.data);
-        if (node.left) {
-            preorder(node.left, result);
-        };
-        if (node.right) {
-            preorder(node.right, result);
-        };
-
-        return result;
-    };
-};
-
-const postorder = (node, result = []) => {
-    // A function to do postorder binnary search tree traversal.
-    /* Do not supply the parameter `result` when calling the function
-        oustside a recursion.
-    */
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            postOrder(tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            postOrder(tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    if (node === null) {
-        return;
-    } else {
-        if (node.root) {
-            node = node.root
-        };
-        if (node.left) {
-            postorder(node.left, result);
-        };
-        if (node.right) {
-            postorder(node.right, result);
-        };
-        result.push(node.data);
-
-        return result;
-    };
-};
-
-const height = (node) => {
-    // A function to return the height of a binary search tree.
-    // Height is the length of the longest branch of a binary search tree.
-    /*  While this function demand a node of a binary search tree,
-        when calling this function, it is much more convenient to supply
-        it with a binary search tree
-        for example: 
-            height(tree.);
-        instead of the root node of a binary search tree,
-        For example:
-            height(tree.root);
-        Regardless of what you supply, this function operates on the root
-        node of a binary search tree.
-    */
-    if (node === null) {
-        return 0;
-    } else {
-        if (node.root) {
-            node = node.root;
-        };
-        let leftHeight = height(node.left);
-        let rightHeight = height(node.right);
-        if (leftHeight < rightHeight) {
-            // Everytime it goes down a node, add one unit of height.
-            rightHeight++;
-            return rightHeight;
-        } else {
-            // Everytime it goes down a node, add one unit of height.
-            /* As height is the length of the longest branch of a binary search tree,
-                a branch must be chosen when the branches are of equal height. For this
-                this function chooses the left branch's height if the left branch is the longest
-                or if the branches are of equal height.
-            */
-            leftHeight++;
-            return leftHeight;
+        } else if (value <= node.data) {
+            remove(value, node.left, node);
+        } else if (value >= node.data) {
+            remove(value, node.right, node);
         };
     };
-};
 
-const depth = (node, root, nodeDepth = 0) => {
-    // A function to return the depth of a node in a binary search tree.
-    // A depth is the number of edges in the path from the root to a particular node.
-    // Do no supply the parameter `nodeDepth` outside a recursive.
-    if (node.data === root.data) {
-        /* Since creating an exact copy of a desired node is difficult,
-            I've decided to make this function accept an object containing `data`
-            property. For example: {data: 5,}
+    const find = function (value, node = this.root) {
+        /* This method returns a node of a binary search tree
+            which contains a given value.
         */
-        return `Depth = ${nodeDepth}`;
-    } else if (node.data > root.data) {
-        nodeDepth++;
-        return depth(node, root.right, nodeDepth);
-    } else if (node.data < root.data) {
-        nodeDepth++;
-        return depth(node, root.left, nodeDepth);
+        // Do not supply the node when calling this method.
+        if (node != null) {
+            if (value === node.data) {
+                return node;
+            } else if (value < node.data) {
+                return find(value, node.left);
+            } else if (value > node.data) {
+                return find(value, node.right);
+            };
+        } else {
+            return `The value doesn't exist in this tree.`;
+        };
+    };
+
+    const levelOrder = function (node = this.root, result = [], queue = []) {
+        /* This method returns an array containing the value
+            of every node in a binary search tree.
+        */
+        // Supply no argument when calling this method.
+        if (node === null) {
+            return;
+        } else {
+            result.push(node.data);
+            queue.push(node.left);
+            queue.push(node.right);
+            while (queue.length) {
+                const currentLevel = queue[0];
+                queue.shift();
+                levelOrder(currentLevel, result, queue);
+            };
+
+            return result;
+        };
+    };
+
+    const inorder = function (node = this.root, result = []) {
+        // This method performs an inorder binary search tree traversal.
+        // Supply no argument when calling this method.
+        if (node === null) {
+            return;
+        } else {
+            if (node.left) {
+                inorder(node.left, result);
+            };
+            result.push(node.data);
+            if (node.right) {
+                inorder(node.right, result);
+            };
+
+            return result;
+        };
+    };
+
+    const preorder = function (node = this.root, result = []) {
+        // This method performs an preorder binary search tree traversal.
+        // Supply no argument when calling this method.
+        if (node === null) {
+            return;
+        } else {
+            result.push(node.data);
+            if (node.left) {
+                preorder(node.left, result);
+            };
+            if (node.right) {
+                preorder(node.right, result);
+            };
+
+            return result;
+        };
+    };
+
+    const postorder = function (node = this.root, result = []) {
+        // This method performs a postorder binary search tree traversal.
+        // Supply no argument when calling this method.
+        if (node === null) {
+            return;
+        } else {
+            if (node.left) {
+                postorder(node.left, result);
+            };
+            if (node.right) {
+                postorder(node.right, result);
+            };
+            result.push(node.data);
+
+            return result;
+        };
+    };
+
+    const height = function (node = this.root) {
+        // This method returns the height of a binary search tree.
+        // Supply no argument whenc calling this method.
+        if (node === null) {
+            return 0;
+        } else {
+            if (node.root) {
+                node = node.root;
+            };
+            let leftHeight = height(node.left);
+            let rightHeight = height(node.right);
+            if (leftHeight < rightHeight) {
+                // Everytime it goes down a node, add one unit of height.
+                rightHeight++;
+                return rightHeight;
+            } else {
+                // Everytime it goes down a node, add one unit of height.
+                /* As height is the length of the longest branch of a binary search tree,
+                    a branch must be chosen when the branches are of equal height. For this
+                    this function chooses the left branch's height if the left branch is the longest
+                    or if the branches are of equal height.
+                */
+                leftHeight++;
+                return leftHeight;
+            };
+        };
+    };
+
+    const depth = function (node, root = this.root, nodeDepth = 0) {
+        // This method returns the depth of a given node in a binary search tree.
+        /* Do not supply the parameter `root` and `nodeDepth` when 
+            calling this method.
+        */
+        if (node.data === root.data) {
+            /* Since creating an exact copy of a desired node is difficult,
+                I've decided to make this function accept an object containing `data`
+                property. For example: {data: 5,}
+            */
+            return `Depth = ${nodeDepth}`;
+        } else if (node.data > root.data) {
+            nodeDepth++;
+            return depth(node, root.right, nodeDepth);
+        } else if (node.data < root.data) {
+            nodeDepth++;
+            return depth(node, root.left, nodeDepth);
+        };
+    };
+
+    const isBalanced = function (root = this.root) {
+        // This method checks whether a binary search tree is balanced.
+        const leftHeight = height(root.left);
+        const rightHeight = height(root.right);
+        const difference = Math.abs(leftHeight - rightHeight);
+        if (difference <= 1) {
+            return `The binary search tree is balanced. Diferrence: ${difference}`;
+        } else {
+            return `The binary search tree is not balanced. Difference: ${difference}`;
+        };
+    };
+
+    const rebalance = function (tree = this) {
+        // This method balances a binary search tree.
+        const array = preorder(tree.root);
+        const result = Tree(array);
+        return result;
+    };
+
+    return {
+        root,
+        insert,
+        remove,
+        find,
+        levelOrder,
+        inorder,
+        preorder,
+        postorder,
+        height,
+        depth,
+        isBalanced,
+        rebalance,
     };
 };
-
-const isBalanced = (root) => {
-    // A function to check whether a binary search tree is balanced.
-    const leftHeight = height(root.left);
-    const rightHeight = height(root.right);
-    const difference = Math.abs(leftHeight - rightHeight);
-    if (difference <= 1) {
-        return `The binary search tree is balanced. Diferrence: ${difference}`;
-    } else {
-        return `The binary search tree is not balanced. Difference: ${difference}`;
-    };
-};
-
-const rebalance = (tree) => {
-    // A function to balance a binary search tree.
-    const array = preorder(tree.root);
-    const result = Tree(array);
-    return result;
-};
-
-let a = [1, 2, 3, 4, 5];
-const testA = () => {
-    console.log(inorder(a));
-};
-a = Tree(a);
-testA();
-insert(7, a);
-testA();
-remove(5, a);
-testA();
-console.log(find(1, a));
-console.log(find(5, a));
-console.log(levelOrder(a));
-console.log(levelOrder(a.root));
-console.log(preorder(a.root));
-console.log(preorder(a));
-console.log(postorder(a.root));
-console.log(postorder(a));
-console.log(height(a));
-console.log(height(a.root));
